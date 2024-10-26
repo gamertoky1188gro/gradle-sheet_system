@@ -43,6 +43,9 @@ jobs:
 
     - name: Run Application with BootRun
       run: ./gradlew bootRun
+      
+    - name: ips
+      run: ifconfig
 
   dependency-submission:
 
