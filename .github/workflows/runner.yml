@@ -40,12 +40,12 @@ jobs:
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
-
-    - name: Run Application with BootRun
-      run: ./gradlew bootRun
       
     - name: ips
       run: ifconfig
+
+    - name: Run Application with BootRun
+      run: ./gradlew bootRun
 
   dependency-submission:
 
