@@ -1,0 +1,61 @@
+name: Java Sheet System
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Cache Gradle Wrapper and Dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/wrapper/
+          ~/.gradle/caches/
+        key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          gradle-${{ runner.os }}-
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4.0.0
+
+    - name: Build with Gradle Wrapper
+      run: ./gradlew build
+
+    - name: Run Application with BootRun
+      run: ./gradlew bootRun
+
+  dependency-submission:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Generate and Submit Dependency Graph
+      uses: gradle/actions/dependency-submission@v4.0.0
+
+    - name: Generate Dependency Report
+      run: ./gradlew dependencies
